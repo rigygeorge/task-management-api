@@ -20,6 +20,11 @@ spring:
 server:
   port: 8080
 
+# JWT Configuration (MUST be at root level, not under spring)
+jwt:
+  secret: your-super-secret-jwt-key-change-this-in-production-minimum-256-bits-long-for-security
+  expiration: 86400000
+
 logging:
   level:
     '[org.hibernate.SQL]': DEBUG
