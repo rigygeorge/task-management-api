@@ -3,11 +3,13 @@ package com.rigygeorge.taskmanagement.controller;
 import com.rigygeorge.taskmanagement.dto.CreateTaskRequest;
 import com.rigygeorge.taskmanagement.dto.TaskResponse;
 import com.rigygeorge.taskmanagement.dto.UpdateTaskRequest;
+import com.rigygeorge.taskmanagement.entity.Task;
 import com.rigygeorge.taskmanagement.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,8 +55,29 @@ public class TaskController {
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("@securityUtils.isManagerOrAdmin()")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Add to TaskController class
+
+    @GetMapping("/my-tasks")
+    public ResponseEntity<List<TaskResponse>> getMyTasks() {
+        List<TaskResponse> tasks = taskService.getMyTasks();
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<TaskResponse>> getTasksByStatus(@PathVariable Task.TaskStatus status) {
+        List<TaskResponse> tasks = taskService.getTasksByStatus(status);
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/priority/{priority}")
+    public ResponseEntity<List<TaskResponse>> getTasksByPriority(@PathVariable Task.TaskPriority priority) {
+        List<TaskResponse> tasks = taskService.getTasksByPriority(priority);
+        return ResponseEntity.ok(tasks);
     }
 }

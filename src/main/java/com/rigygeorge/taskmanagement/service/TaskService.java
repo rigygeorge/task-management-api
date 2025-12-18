@@ -95,6 +95,32 @@ public class TaskService {
         return mapToResponse(task);
     }
     
+    // Add to TaskService class
+
+    public List<TaskResponse> getTasksByStatus(Task.TaskStatus status) {
+        CustomUserDetails currentUser = getCurrentUser();
+        return taskRepository.findByTenantIdAndStatus(currentUser.getTenantId(), status)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<TaskResponse> getTasksByPriority(Task.TaskPriority priority) {
+        CustomUserDetails currentUser = getCurrentUser();
+        return taskRepository.findByTenantIdAndPriority(currentUser.getTenantId(), priority)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<TaskResponse> getMyTasks() {
+        CustomUserDetails currentUser = getCurrentUser();
+        return taskRepository.findByTenantIdAndAssignedTo(currentUser.getTenantId(), currentUser.getId())
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public TaskResponse updateTask(UUID id, UpdateTaskRequest request) {
         CustomUserDetails currentUser = getCurrentUser();

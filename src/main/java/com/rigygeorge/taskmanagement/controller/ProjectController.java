@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -46,9 +48,12 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
     
+    // Update deleteProject method
     @DeleteMapping("/{id}")
+    @PreAuthorize("@securityUtils.isManagerOrAdmin()")
     public ResponseEntity<Void> deleteProject(@PathVariable UUID id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
+    
 }
