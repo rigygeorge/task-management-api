@@ -4,6 +4,10 @@ import com.rigygeorge.taskmanagement.dto.CreateProjectRequest;
 import com.rigygeorge.taskmanagement.dto.ProjectResponse;
 import com.rigygeorge.taskmanagement.dto.UpdateProjectRequest;
 import com.rigygeorge.taskmanagement.service.ProjectService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Projects", description = "Project management operations")
+@SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
@@ -22,24 +28,28 @@ public class ProjectController {
     
     private final ProjectService projectService;
     
+    @Operation(summary = "Create project", description = "Create a new project")
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(@Valid @RequestBody CreateProjectRequest request) {
         ProjectResponse response = projectService.createProject(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
+    @Operation(summary = "Get all projects", description = "Retrieve all projects for current user's organization")
     @GetMapping
     public ResponseEntity<List<ProjectResponse>> getAllProjects() {
         List<ProjectResponse> projects = projectService.getAllProjects();
         return ResponseEntity.ok(projects);
     }
     
+    @Operation(summary = "Get project by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ProjectResponse> getProjectById(@PathVariable UUID id) {
         ProjectResponse project = projectService.getProjectById(id);
         return ResponseEntity.ok(project);
     }
     
+    @Operation(summary = "Update project")
     @PutMapping("/{id}")
     public ResponseEntity<ProjectResponse> updateProject(
             @PathVariable UUID id,
@@ -48,7 +58,8 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
     
-    // Update deleteProject method
+    // deleteProject method
+    @Operation(summary = "Delete project", description = "Delete project (Admin/Manager only)")
     @DeleteMapping("/{id}")
     @PreAuthorize("@securityUtils.isManagerOrAdmin()")
     public ResponseEntity<Void> deleteProject(@PathVariable UUID id) {
