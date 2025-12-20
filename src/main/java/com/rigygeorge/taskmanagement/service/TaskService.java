@@ -57,7 +57,10 @@ public class TaskService {
         return mapToResponse(task);
     }
     
-    public List<TaskResponse> getAllTasks() {
+    public List<TaskResponse> getAllTasks(Task.TaskStatus status,
+        Task.TaskPriority priority,
+        UUID projectId,
+        UUID assigneeId) {
         CustomUserDetails currentUser = getCurrentUser();
         return taskRepository.findByTenantId(currentUser.getTenantId())
                 .stream()
