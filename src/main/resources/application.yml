@@ -3,14 +3,14 @@ server:
 
 spring:
   application:
-    name: task-management-api
+    name: taskmanagement
   
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/taskmanagement}
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:taskmanagement}
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-
+  
   jpa:
     hibernate:
       ddl-auto: ${HIBERNATE_DDL_AUTO:update}
@@ -20,16 +20,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         '[format_sql]': true
 
-
-
-# JWT Configuration (MUST be at root level, not under spring)
 jwt:
-  secret: ${JWT_SECRET:your-default-secret-key-min-256-bits}
+  secret: ${JWT_SECRET:your-default-secret-key-change-in-production-must-be-at-least-256-bits-long}
   expiration: ${JWT_EXPIRATION:86400000}
-
-logging:
-  level:
-    '[org.hibernate.SQL]': DEBUG
 
 springdoc:
   api-docs:
