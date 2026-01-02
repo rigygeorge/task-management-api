@@ -72,7 +72,12 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**", "/api/health",
-                "/swagger-ui/**", "/v3/api-docs/**","/swagger-ui.html").permitAll()
+                "/swagger-ui/**",       // Resources (JS, CSS)
+                "/swagger-ui.html",     // Entry point
+                "/v3/api-docs/**",      // The JSON documentation (IMPORTANT: must have /**)
+                "/v3/api-docs.yaml",
+                "/swagger-resources/**",
+                "/webjars/**").permitAll()
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider())   
