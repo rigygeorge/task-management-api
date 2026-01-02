@@ -6,9 +6,7 @@ spring:
     name: taskmanagement
   
   datasource:
-    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:taskmanagement}
-    username: ${DATABASE_USERNAME:postgres}
-    password: ${DATABASE_PASSWORD:postgres}
+    url: ${DATABASE_URL}?sslmode=require
     driver-class-name: org.postgresql.Driver
   
   jpa:
