@@ -44,7 +44,7 @@ import org.springframework.context.annotation.Configuration;
         ),
         @Server(
             description = "Production",
-            url = "https://your-app.railway.app"
+            url = "https://task-management-api-production-2c22.up.railway.app"
         )
     }
 )
