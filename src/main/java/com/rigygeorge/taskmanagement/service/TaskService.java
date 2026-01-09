@@ -62,11 +62,17 @@ public class TaskService {
         UUID projectId,
         UUID assigneeId) {
         CustomUserDetails currentUser = getCurrentUser();
-        return taskRepository.findByTenantId(currentUser.getTenantId())
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
+        List<Task> tasks = taskRepository.findByTenantId(currentUser.getTenantId());
+
+        // Apply filters
+        return tasks.stream()
+        .filter(task -> status == null || task.getStatus().equals(status))
+        .filter(task -> priority == null || task.getPriority().equals(priority))
+        .filter(task -> projectId == null || task.getProjectId().equals(projectId))
+        .filter(task -> assigneeId == null || task.getAssignedTo().equals(assigneeId))
+        .map(this::mapToResponse)
+        .collect(Collectors.toList());
+        }
     
     public List<TaskResponse> getTasksByProject(UUID projectId) {
         CustomUserDetails currentUser = getCurrentUser();
